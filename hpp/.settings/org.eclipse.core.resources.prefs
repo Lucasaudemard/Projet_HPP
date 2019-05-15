@@ -3,5 +3,11 @@
 >>>>>>>=refs/remotes/origin/chloe
 eclipse.preferences.version=1
 encoding//src/main/java=UTF-8
+<<<<<<< Upstream, based on origin/master
 encoding//src/test/java=UTF-8
+=======
+encoding//src/main/resources=UTF-8
+encoding//src/test/java=UTF-8
+encoding//src/test/resources=UTF-8
+>>>>>>> 441cfa1 Commit
 encoding/<project>=UTF-8
