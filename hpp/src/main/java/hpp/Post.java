@@ -19,24 +19,58 @@ public class Post implements Event {
 		this.timeStamp = timeStamp;
 		this.postId = postId;
 		this.userName = userName;
+		this.internScore = 10;
+		this.externScore = 0;
+		this.commenter = 0;
+	}
+
+
+	@Override
+	public String getId() {
+		// TODO Auto-generated method stub
+		return this.postId;
 	}
 
 	@Override
-	public void getId() {
+	public void changeId(String newId) {
 		// TODO Auto-generated method stub
-
+		this.postId = newId;
 	}
 
 	@Override
-	public void changeId() {
+	public LocalDateTime getTs() {
 		// TODO Auto-generated method stub
-
+		return this.timeStamp;
 	}
+
 
 	@Override
-	public void getTs() {
+	public void decreaseInternScore() {
 		// TODO Auto-generated method stub
-
+		this.internScore--;
 	}
 
+
+	@Override
+	public void addNewComment() {
+		// TODO Auto-generated method stub
+		this.externScore+=10;
+	}
+
+
+	@Override
+	public void decreaseExternScore() {
+		// TODO Auto-generated method stub
+		this.externScore--;
+		
+	}
+	
+	public int getScore() {
+		return this.internScore+this.externScore;
+	}
+	
+	public String getUserName() {
+		return this.userName;
+	}
+	
 }
