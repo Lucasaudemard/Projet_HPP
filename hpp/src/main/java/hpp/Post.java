@@ -67,10 +67,12 @@ public class Post implements Event {
 		
 	}
 	
+	@Override
 	public int getScore() {
 		return this.internScore+this.externScore;
 	}
 	
+	@Override
 	public String getUserName() {
 		return this.userName;
 	}

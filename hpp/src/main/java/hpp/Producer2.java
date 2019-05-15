@@ -9,6 +9,8 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
 
+
+// Producing Posts 
 public class Producer2 implements Runnable {
 
 	private BlockingQueue<Event> bq;

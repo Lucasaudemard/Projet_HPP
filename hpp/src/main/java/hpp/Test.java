@@ -10,7 +10,6 @@ public class Test {
 				BlockingQueue<Event> bq = new ArrayBlockingQueue<Event>(20);
 				Producer2 p2 = new Producer2(bq,"C:\\Users\\Florian\\Desktop\\Data HPP project\\testposts.dat");
 				p2.run();
-				if (bq.peek().getClass().getName()=="hpp.Post") System.out.println("True");
 	}
 
 	public Test() {
