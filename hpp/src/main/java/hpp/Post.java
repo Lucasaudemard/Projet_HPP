@@ -76,5 +76,12 @@ public class Post implements Event {
 	public String getUserName() {
 		return this.userName;
 	}
+
+
+	@Override
+	public String getPostReplied() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

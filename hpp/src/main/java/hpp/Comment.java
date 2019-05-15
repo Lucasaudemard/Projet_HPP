@@ -27,11 +27,18 @@ public class Comment implements Event {
 		return this.commentId;
 	}
 
+	
 	@Override
 	public void changeId(String newId) {
 		// TODO Auto-generated method stub
 		this.postReplied = newId;
-		}
+	}
+	
+	//Return the Id directed linked to this comment (It can be a post_id or comment_id)
+	@Override
+	public String getPostReplied() {
+		return this.postReplied;
+	}
 
 	@Override
 	public LocalDateTime getTs() {
@@ -42,13 +49,9 @@ public class Comment implements Event {
 	@Override
 	public void decreaseInternScore() {
 		// TODO Auto-generated method stub
-<<<<<<< Upstream, based on origin/master
-		this.internScore--;
-	}
-=======
+		this.internScore --;
 	}
 	
->>>>>>> a298616 Ordo v3
 	@Override
 	public void addNewComment() {
 		// TODO Auto-generated method stub	

@@ -11,6 +11,7 @@ public interface Event {
 	void decreaseExternScore();
 	int getScore();
 	String getUserName();
+	String getPostReplied();
 	
 	//TODO Add other usefull methods
 }

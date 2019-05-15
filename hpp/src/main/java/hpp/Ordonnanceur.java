@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 public class Ordonnanceur implements Runnable {
 	
-	private List<String> listCom;
-	private HashMap<String, List<String>> comToPost;
-	private HashMap<String, Post> postToObjPost;
+	
+	private HashMap<String, String> comToPost;
+	private HashMap<String, Event> postToObjPost;
 	
 	private BlockingQueue<Event> produce1;
 	private BlockingQueue<Event> produce2;
@@ -22,7 +22,7 @@ public class Ordonnanceur implements Runnable {
 	
 	public Ordonnanceur(BlockingQueue<Event> p1, BlockingQueue<Event> p2 ) {
 		
-		this.listCom = new ArrayList<String>();
+		
 		this.comToPost = new HashMap<>();
 		this.postToObjPost = new HashMap<>();
 		
@@ -37,7 +37,7 @@ public class Ordonnanceur implements Runnable {
 		// TODO add a wait when the blocking queue is full 
 	}
 	
-	public void chooseToQueue(BlockingQueue<Event> p1, BlockingQueue<Event> p2) {
+	public void chooseToQueue(BlockingQueue<Event> p1, BlockingQueue<Event> p2) throws InterruptedException {
 		
 		Event obj1 = p1.peek();
 		Event obj2 = p2.peek();
@@ -45,12 +45,12 @@ public class Ordonnanceur implements Runnable {
 		
 		if(obj1.getTs().isBefore(obj2.getTs())) {
 			
-			this.currentObj = obj1;
+			this.currentObj = p1.take();
 			
 		}
 		else {
 			
-			this.currentObj = obj2;
+			this.currentObj = p2.take();
 		}
 		
 	}
@@ -59,33 +59,29 @@ public class Ordonnanceur implements Runnable {
 	
 	public void hashId() {
 		
-		/*String comId = com.getId();
-		this.listCom.add(comId);
-		String postId = post.getId();
 		
-		this.comToPost.put(postId, this.listCom);*/
+		String currentId = this.currentObj.getId();
 		
 		if(this.currentObj.getClass().getName() == "hpp.Post") {
 			
-			this.comToPost.put(this.currentObj.getId(), null);
+			this.postToObjPost.put(currentId, this.currentObj);
 			
 		}
 		else {
 			
-			this.listCom.add(this.currentObj.getId());
-			
-			
-		}
-		
-			
+			if(this.currentObj.getPostReplied().getClass().getName() == "hpp.Post") {
+				
+				this.comToPost.put(currentId, this.currentObj.getPostReplied());
+					
+			}
+			else {
+					
+				this.comToPost.put(currentId, comToPost.get(this.currentObj.getPostReplied()));
+					
+			}
+		}		
 	}
-	
-	
-	public void hashObj(Post post) {
 		
-		String postId = post.getId();
 		
-		this.postToObjPost.put(postId, post);
-	}
 
 }
