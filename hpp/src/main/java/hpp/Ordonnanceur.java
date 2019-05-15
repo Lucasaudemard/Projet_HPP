@@ -2,6 +2,7 @@ package hpp;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,6 +14,10 @@ public class Ordonnanceur implements Runnable {
 	
 	private BlockingQueue<Event> produce1;
 	private BlockingQueue<Event> produce2;
+	
+	public LocalDateTime ts;
+	
+	private Event currentObj;
 	
 	
 	public Ordonnanceur(BlockingQueue<Event> p1, BlockingQueue<Event> p2 ) {
@@ -32,9 +37,27 @@ public class Ordonnanceur implements Runnable {
 		// TODO add a wait when the blocking queue is full 
 	}
 	
+	public void chooseToQueue(BlockingQueue<Event> p1, BlockingQueue<Event> p2) {
+		
+		Event obj1 = p1.peek();
+		Event obj2 = p2.peek();
+		
+		
+		if(obj1.getTs().isBefore(obj2.getTs())) {
+			
+			this.currentObj = obj1;
+			
+		}
+		else {
+			
+			this.currentObj = obj2;
+		}
+		
+	}
 	
 	
-	public void hashId(Event com, Event post) {
+	
+	public void hashId() {
 		
 		/*String comId = com.getId();
 		this.listCom.add(comId);
@@ -42,8 +65,14 @@ public class Ordonnanceur implements Runnable {
 		
 		this.comToPost.put(postId, this.listCom);*/
 		
-		if(com.getClass().getName() == "hpp.Post") {
+		if(this.currentObj.getClass().getName() == "hpp.Post") {
 			
+			this.comToPost.put(this.currentObj.getId(), null);
+			
+		}
+		else {
+			
+			this.listCom.add(this.currentObj.getId());
 			
 			
 		}

@@ -42,8 +42,13 @@ public class Comment implements Event {
 	@Override
 	public void decreaseInternScore() {
 		// TODO Auto-generated method stub
+<<<<<<< Upstream, based on origin/master
 		this.internScore--;
 	}
+=======
+	}
+	
+>>>>>>> a298616 Ordo v3
 	@Override
 	public void addNewComment() {
 		// TODO Auto-generated method stub	
