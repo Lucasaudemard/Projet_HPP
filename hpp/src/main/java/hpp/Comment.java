@@ -32,8 +32,6 @@ public class Comment implements Event {
 	@Override
 	public void decreaseInternScore() {
 		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void addNewComment() {

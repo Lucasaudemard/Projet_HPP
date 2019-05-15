@@ -49,6 +49,8 @@ public class Post implements Event {
 		// TODO Auto-generated method stub
 		this.internScore--;
 	}
+	
+	
 
 
 	@Override

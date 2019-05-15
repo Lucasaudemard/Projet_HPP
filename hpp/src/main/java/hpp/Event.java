@@ -9,6 +9,7 @@ public interface Event {
 	void decreaseInternScore();
 	void addNewComment();
 	void decreaseExternScore();
+
 	
 	//TODO Add other usefull methods
 }
