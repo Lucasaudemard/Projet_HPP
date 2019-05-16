@@ -4,7 +4,6 @@ import java.util.concurrent.BlockingQueue;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 public class Ordonnanceur implements Runnable {
 	
@@ -47,13 +46,12 @@ public class Ordonnanceur implements Runnable {
 	
 	public void chooseToQueue() throws InterruptedException {
 		
-<<<<<<< Upstream, based on origin/master
-		Event obj1 = p1.peek(); //post
-		Event obj2 = p2.peek(); //comment
-=======
+
+	
+
 		Event obj1 = this.produce1.peek();
 		Event obj2 = this.produce2.peek();
->>>>>>> 28de983 Amelioration de la fonction de hashage + setter
+
 		
 		
 		if(obj1.getTs().isBefore(obj2.getTs())) {
@@ -85,35 +83,26 @@ public class Ordonnanceur implements Runnable {
 		//Si l'objet actuel est un Post
 		if(this.currentObj instanceof Post) {
 			
-			this.getPostToPostObj().put(currentId, (Post)this.currentObj); //Lien entre l'ID du post et de l'objet Event associé dans une HashMap
+			this.postToObjPost.put(currentId, this.currentObj); //Lien entre l'ID du post et de l'objet Event associé dans une HashMap
 			
 		}
 		else if(this.currentObj instanceof Comment){ //Si l'objet actuel est un Comment
 			
-			if(postToObjPost.containsKey(((Comment) this.currentObj).getPostRepliedId())) { //Si le Comment répond à un Post
+			if(postToObjPost.containsKey(this.currentObj.getPostReplied())) { //Si le Comment répond à un Post
 				
-				this.getComToPost().put(currentId, ((Comment) this.currentObj).getPostRepliedId()); //Lien entre l'ID du Comment et l'ID du Post associé
+				this.comToPost.put(currentId, this.currentObj.getPostReplied()); //Lien entre l'ID du Comment et l'ID du Post associé
 					
 			}
-			else if(comToPost.containsKey(((Comment) this.currentObj).getPostRepliedId())) { //Si le Comment répond à un Comment
+			else if(comToPost.containsKey(this.currentObj.getPostReplied())) { //Si le Comment répond à un Comment
 					
-				this.getComToPost().put(currentId, comToPost.get(((Comment) this.currentObj).getPostRepliedId())); //Lien entre l'ID de la réponse et l'ID du Post associé
-			
+				this.comToPost.put(currentId, comToPost.get(this.currentObj.getPostReplied())); //Lien entre l'ID de la réponse et l'ID du Post associé
 			}		
 		}
 	}
 	
 	
 	public HashMap<String, Event> getPostToPostObj(){
-		return this.postToObjPost;
-	}
-	
-	public HashMap<String, String> getComToPost(){
-		return this.comToPost;
-	}
-	
-	public Event getCurrentObj() {
-		return this.currentObj;
+		return postToObjPost;
 	}
 	
 	
@@ -122,7 +111,7 @@ public class Ordonnanceur implements Runnable {
 		this.ts = tsP;
 	}
 		
-	/*public void incrementScores() {
+	public void incrementScores() {
 		
 		for (int i=10; i>=0; i--) {
 			
@@ -170,7 +159,7 @@ public class Ordonnanceur implements Runnable {
 			// Day11
 			
 		}
-	}*/
+	}
 		
 
 }
