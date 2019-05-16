@@ -162,7 +162,7 @@ public class Ordonnanceur implements Runnable {
 		return this.comToPost;
 	}
 	
-	public Event currentObj() {
+	public Event getCurrentObj() {
 		return this.currentObj;
 	}
 	
