@@ -41,8 +41,17 @@ public class Ordonnanceur implements Runnable {
 	
 	
 	public void run() {
-		// TODO Auto-generated method stub
-		// TODO add a wait when the blocking queue is full 
+		
+		try {
+			this.chooseToQueue();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.hashId();
+		
+		this.incrementScores();
 	}
 	
 	public void chooseToQueue() throws InterruptedException {
