@@ -55,7 +55,7 @@ public class Ordonnanceur implements Runnable {
 		
 		this.hashId();
 		
-		this.incrementScores();
+		this.decrementScores();
 	}
 	
 	public void chooseToQueue() throws InterruptedException {
