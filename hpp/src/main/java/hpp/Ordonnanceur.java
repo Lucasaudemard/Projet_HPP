@@ -1,9 +1,7 @@
 package hpp;
 
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -46,20 +44,27 @@ public class Ordonnanceur implements Runnable {
 		// TODO add a wait when the blocking queue is full 
 	}
 	
-	public void chooseToQueue(BlockingQueue<Event> p1, BlockingQueue<Event> p2) throws InterruptedException {
+	public void chooseToQueue() throws InterruptedException {
 		
+<<<<<<< Upstream, based on origin/master
 		Event obj1 = p1.peek(); //post
 		Event obj2 = p2.peek(); //comment
+=======
+		Event obj1 = this.produce1.peek();
+		Event obj2 = this.produce2.peek();
+>>>>>>> 28de983 Amelioration de la fonction de hashage + setter
 		
 		
 		if(obj1.getTs().isBefore(obj2.getTs())) {
 			
-			this.currentObj = p1.take();
+			this.currentObj = this.produce1.take();
+			this.setTs(this.currentObj.getTs());
 			
 		}
 		else {
 			
-			this.currentObj = p2.take();
+			this.currentObj = this.produce2.take();
+			this.setTs(this.currentObj.getTs());
 		}
 		
 		dayList.get(0).addEvent(this.currentObj); // ajout du currentObj dans le Day 1 (soit le premier élément de dayList)
@@ -71,29 +76,40 @@ public class Ordonnanceur implements Runnable {
 	
 	
 	
+	
 	public void hashId() {
-		
 		
 		String currentId = this.currentObj.getId();
 		
-		if(this.currentObj.getClass().getName() == "hpp.Post") {
+		//Si l'objet actuel est un Post
+		if(this.currentObj instanceof Post) {
 			
-			this.postToObjPost.put(currentId, this.currentObj);
+			this.postToObjPost.put(currentId, this.currentObj); //Lien entre l'ID du post et de l'objet Event associé dans une HashMap
 			
 		}
-		else {
+		else if(this.currentObj instanceof Comment){ //Si l'objet actuel est un Comment
 			
-			if(this.currentObj.getPostReplied().getClass().getName() == "hpp.Post") {
+			if(postToObjPost.containsKey(this.currentObj.getPostReplied())) { //Si le Comment répond à un Post
 				
-				this.comToPost.put(currentId, this.currentObj.getPostReplied());
+				this.comToPost.put(currentId, this.currentObj.getPostReplied()); //Lien entre l'ID du Comment et l'ID du Post associé
 					
 			}
-			else {
+			else if(comToPost.containsKey(this.currentObj.getPostReplied())) { //Si le Comment répond à un Comment
 					
-				this.comToPost.put(currentId, comToPost.get(this.currentObj.getPostReplied()));
-					
-			}
-		}		
+				this.comToPost.put(currentId, comToPost.get(this.currentObj.getPostReplied())); //Lien entre l'ID de la réponse et l'ID du Post associé
+			}		
+		}
+	}
+	
+	
+	public HashMap<String, Event> getPostToPostObj(){
+		return postToObjPost;
+	}
+	
+	
+	public void setTs(LocalDateTime tsP) {
+		
+		this.ts = tsP;
 	}
 		
 	public void incrementScores() {
