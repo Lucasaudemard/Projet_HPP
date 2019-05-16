@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Main {
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		String commentsPath = "C:\\Users\\Florian\\Desktop\\Data HPP project\\comments.dat";
 		String postsPath = "C:\\Users\\Florian\\Desktop\\Data HPP project\\posts.dat";
 		BlockingQueue<Event> bqComments = new ArrayBlockingQueue<Event>(1000000);
@@ -36,6 +36,6 @@ public class Main {
 			// Preserve interrupt status
 			Thread.currentThread().interrupt();
 		}
-	}
+	}*/
 
 }
