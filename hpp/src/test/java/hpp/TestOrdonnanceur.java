@@ -6,13 +6,42 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import org.junit.Test;
 
 public class TestOrdonnanceur {
 
 	@Test
-	public void test() {
+	public void test() throws InterruptedException {
+		
+		BlockingQueue<Event> p1 = new ArrayBlockingQueue<Event>(20);
+		BlockingQueue<Event> p2 = new ArrayBlockingQueue<Event>(20);
+		
+		LocalDateTime now1 = LocalDateTime.now();
+		LocalDateTime now2 = now1.minusHours(3);
+		
+		Event post1 = new Post(now1, "100", null);
+		Event com2 = new Comment(now2, "200", null, "100");
+		Event com3 = new Comment(null, null, null, null);
+		Event com4 = new Comment(null, null, null, null);
+		
+		p1.add(post1);
+		p2.add(com2);
+		//p2.add(com3);
+		//p2.add(com4);
+		
+		Ordonnanceur t3 = new Ordonnanceur(p1, p2);
+		
+		t3.chooseToQueue();
+		//t3.hashId();
+		t3.getPostToPostObj().put(post1.getId(), post1);
+		
+		assertEquals(1, t3.getPostToPostObj().size());
+		
+		
+		
 		
 		
 	}
