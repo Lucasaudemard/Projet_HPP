@@ -21,6 +21,8 @@ public class Ordonnanceur implements Runnable {
 	
 	public List<Day> dayList;
 	
+	public List<Event> top3;
+	
 	
 	public Ordonnanceur(BlockingQueue<Event> p1, BlockingQueue<Event> p2 ) {
 		
@@ -75,9 +77,7 @@ public class Ordonnanceur implements Runnable {
 			this.currentObj = this.produce2.take();
 			this.setTs(this.currentObj.getTs());
 		}
-		
-		dayList.get(0).addEvent(this.currentObj); // ajout du currentObj dans le Day 1 (soit le premier élément de dayList)
-		
+				
 	}
 	
 	
@@ -91,6 +91,7 @@ public class Ordonnanceur implements Runnable {
 		if(this.getCurrentObj() instanceof Post) {
 			
 			this.getPostToPostObj().put(currentId, this.getCurrentObj()); //Lien entre l'ID du post et de l'objet Event associé dans une HashMap
+			this.dayList.get(0).addEvent(this.getCurrentObj()); // ajout du currentObj dans le Day 1 (soit le premier élément de dayList)
 			
 		}
 		else if(this.getCurrentObj() instanceof Comment){ //Si l'objet actuel est un Comment
@@ -99,16 +100,24 @@ public class Ordonnanceur implements Runnable {
 				
 				this.getComToPost().put(currentId, ((Comment) this.getCurrentObj()).getPostRepliedId()); //Lien entre l'ID du Comment et l'ID du Post associé
 					
+				this.dayList.get(0).addEvent(this.getCurrentObj()); // ajout du currentObj dans le Day 1 (soit le premier élément de dayList)
+				
 			}
 			else if(this.getComToPost().containsKey(((Comment) this.getCurrentObj()).getPostRepliedId())) { //Si le Comment répond à un Comment
 					
 				this.getComToPost().put(currentId, this.getComToPost().get(((Comment) this.getCurrentObj()).getPostRepliedId())); //Lien entre l'ID de la réponse et l'ID du Post associé
-			}		
+				((Comment) this.getCurrentObj()).changeId(this.getComToPost().get(((Comment) this.getCurrentObj()).getPostRepliedId()));
+				this.dayList.get(0).addEvent(this.getCurrentObj()); // ajout du currentObj dans le Day 1 (soit le premier élément de dayList)
+			}
+			String userID = ((Comment) this.getCurrentObj()).getUserId();
+			String postID = ((Comment) this.getCurrentObj()).getPostRepliedId();
+			Post p = (Post) postToObjPost.get(postID);
+			p.addNewComment(userID);
 		}
 	}
 	
-			
-	public void incrementScores() {
+
+	public void decrementScores() {
 		
 		for (int i=9; i>=0; i--) {
 			
@@ -172,6 +181,12 @@ public class Ordonnanceur implements Runnable {
 			
 			
 		}
+	}
+	
+	public void getTop3() {
+		
+		
+		
 	}
 
 //-------------------------GETTER AND SETTER---------------------------
