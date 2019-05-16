@@ -137,8 +137,9 @@ public class Ordonnanceur implements Runnable {
 					}
 				}
 				
-				dayList.get(i+1).addEvents(modifiedEvents); //déplacement des Events dans le Day suivant
-			}
+				dayList.get(i+1).addEvents(modifiedEvents); //ajout des Events dans le Day suivant
+				dayList.get(i).removeEvents(modifiedEvents); //suppression des Events qui changent de jour
+ 			}
 			
 			// Day11
 			
