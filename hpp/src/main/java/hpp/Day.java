@@ -31,5 +31,9 @@ public class Day {
 		}
 		return modifiedEvents;
 	}
+	
+	public void addEvent(Event e){
+		this.listEvent.add(e);
+	}
 
 }

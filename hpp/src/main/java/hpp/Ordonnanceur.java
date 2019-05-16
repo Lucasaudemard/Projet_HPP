@@ -19,6 +19,8 @@ public class Ordonnanceur implements Runnable {
 	
 	private Event currentObj;
 	
+	public List<Day> dayList;
+	
 	
 	public Ordonnanceur(BlockingQueue<Event> p1, BlockingQueue<Event> p2 ) {
 		
@@ -28,6 +30,12 @@ public class Ordonnanceur implements Runnable {
 		
 		this.produce1 = p1;
 		this.produce2 = p2;
+		
+		this.dayList = new LinkedList<Day>(); //déclaration de la liste de Day
+		
+		for (int i=1; i<12; i++) {
+			this.dayList.add(new Day(this.ts, 24*i, new LinkedList<Event>())); //ajout des 11 objets Day
+		}
 		
 	}
 	
@@ -39,8 +47,8 @@ public class Ordonnanceur implements Runnable {
 	
 	public void chooseToQueue(BlockingQueue<Event> p1, BlockingQueue<Event> p2) throws InterruptedException {
 		
-		Event obj1 = p1.peek();
-		Event obj2 = p2.peek();
+		Event obj1 = p1.peek(); //post
+		Event obj2 = p2.peek(); //comment
 		
 		
 		if(obj1.getTs().isBefore(obj2.getTs())) {
@@ -53,6 +61,7 @@ public class Ordonnanceur implements Runnable {
 			this.currentObj = p2.take();
 		}
 		
+		dayList.get(0).addEvent(this.currentObj); // ajout du currentObj dans le Day 1 (soit le premier élément de dayList)
 	}
 	
 	

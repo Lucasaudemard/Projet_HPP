@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class TestDay {
 
-	@Test
+	
 	public void test() {
 		LocalDateTime currentTime = LocalDateTime.parse("2010-02-22T09:20:32.064");
 		BlockingQueue<Event> bq = new ArrayBlockingQueue<Event>(20);
@@ -28,6 +28,26 @@ public class TestDay {
 		Day day1 = new Day(currentTime, 24, listEvents);
 		assertEquals(4, day1.compareTS().size());
 		
+	}
+	
+	@Test
+	public void testAdd() {
+		LocalDateTime currentTime = LocalDateTime.parse("2010-02-22T09:20:32.064");
+		BlockingQueue<Event> bq = new ArrayBlockingQueue<Event>(20);
+		Producer2 p2 = new Producer2(bq,"/Users/joulin/Documents/Cours TSE FISE2/Projet HPP/test_posts.dat");
+		p2.run();
+
+		List<Event> listEvents = new LinkedList<Event>();
+		for (int i=0;i<15;i++) {
+			listEvents.add(bq.remove());
+		}
+
+		Event newEvent = bq.remove();
+		
+		System.out.println(listEvents);
+		Day day1 = new Day(currentTime, 24, listEvents);
+		day1.addEvent(newEvent);
+		assertEquals(16, day1.listEvent.size());
 	}
 
 }
