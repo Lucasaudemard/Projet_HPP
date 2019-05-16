@@ -42,11 +42,12 @@ public class TestDay {
 			listEvents.add(bq.remove());
 		}
 
-		Event newEvent = bq.remove();
+		List<Event> newEvent = new LinkedList<Event>();
+		newEvent.add(bq.remove());
 		
 		System.out.println(listEvents);
 		Day day1 = new Day(currentTime, 24, listEvents);
-		day1.addEvent(newEvent);
+		day1.addEvents(newEvent);
 		assertEquals(16, day1.listEvent.size());
 	}
 

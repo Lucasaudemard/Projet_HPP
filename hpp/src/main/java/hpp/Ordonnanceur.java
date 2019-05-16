@@ -5,6 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Ordonnanceur implements Runnable {
 	
@@ -91,6 +92,47 @@ public class Ordonnanceur implements Runnable {
 		}		
 	}
 		
+	public void incrementScores() {
+		
+		for (int i=10; i>=0; i--) {
+			
+			List<Event> modifiedEvents = new LinkedList<Event>();
+			modifiedEvents = this.dayList.get(i).compareTS();
+			
+			// du Day10 au Day1
+			for (int j=0; j<modifiedEvents.size();j++) {
+				
+				// si c'est un post et que son score interne n'est pas égal à 0 :
+				if (modifiedEvents.get(j) instanceof Post) {
+					
+					if (((Post) modifiedEvents.get(j)).getScore()>0) {
+						// décremenetation de l'intern score du post de 1
+
+					}
+					
+				}
+				
+				// si c'est un comment :
+				else {
+					if (((Comment) modifiedEvents.get(j)).getScore()>0) {
+						// recup du postID associé
+						// décremenetation de l'intern score du post de 1
+
+					}
+					
+					else {
+						// on supprime l'Event de modifiedEvents si c'est un comment vieux de 10 jours
+						modifiedEvents.remove(j);
+					}
+				}
+				
+				dayList.get(i+1).addEvents(modifiedEvents);
+			}
+			
+			// Day11
+			
+		}
+	}
 		
 
 }

@@ -32,6 +32,16 @@ public class Day {
 		return modifiedEvents;
 	}
 	
+	// pour ajouter une liste d'Event 
+	public void addEvents(List<Event> e){
+		
+		for (int i=0; i<e.size(); i++) {
+			this.listEvent.add(e.get(i));
+	
+		}
+	}
+	
+	// pour ajouter un seul Event
 	public void addEvent(Event e){
 		this.listEvent.add(e);
 	}
