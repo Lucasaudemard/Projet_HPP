@@ -45,5 +45,10 @@ public class Day {
 	public void addEvent(Event e){
 		this.listEvent.add(e);
 	}
+	
+	// pour supprimer une liste d'Events de la listEvent du Day
+	public void removeEvents(List<Event> e) {
+			this.listEvent.removeAll(e);
+	}
 
 }

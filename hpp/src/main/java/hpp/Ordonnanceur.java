@@ -63,6 +63,10 @@ public class Ordonnanceur implements Runnable {
 		}
 		
 		dayList.get(0).addEvent(this.currentObj); // ajout du currentObj dans le Day 1 (soit le premier élément de dayList)
+		//TODO
+		// vérifier si c'est une réponse + changer le postiD associé si oui
+		// si c'est un comment (ou une réponse) faire appel à addNewComment
+		
 	}
 	
 	
@@ -106,7 +110,8 @@ public class Ordonnanceur implements Runnable {
 				if (modifiedEvents.get(j) instanceof Post) {
 					
 					if (((Post) modifiedEvents.get(j)).getScore()>0) {
-						// décremenetation de l'intern score du post de 1
+						
+						((Post) modifiedEvents.get(j)).decreaseInternScore();
 
 					}
 					
@@ -114,19 +119,25 @@ public class Ordonnanceur implements Runnable {
 				
 				// si c'est un comment :
 				else {
-					if (((Comment) modifiedEvents.get(j)).getScore()>0) {
-						// recup du postID associé
-						// décremenetation de l'intern score du post de 1
-
-					}
+					String postID = ((Comment) modifiedEvents.get(j)).getPostRepliedId(); // récupération du postID associé au comment
+					// on vérifie si le post est toujours dans la hashmap (si il est tjrs vivant)
 					
+					if (postToObjPost.containsKey(postID)) {
+						Post p = (Post) postToObjPost.get(postID);// récupération de l'objet post ayant ce postID
+						
+						p.decreaseExternScore(); // décremenetation de l'extern score du post de 1
+						
+						if (i==10) { // pour les comments le score intern au comment est égal à 10-nombre de jours
+							modifiedEvents.remove(j); //on supprime l'Event de modifiedEvents si c'est un comment vieux de 10 jours
+						}
+					}
 					else {
-						// on supprime l'Event de modifiedEvents si c'est un comment vieux de 10 jours
-						modifiedEvents.remove(j);
+						modifiedEvents.remove(j); //on supprime l'Event de modifiedEvents si le post associé n'existe plus
+						// supprimer le comment de la hashmap !!!!
 					}
 				}
 				
-				dayList.get(i+1).addEvents(modifiedEvents);
+				dayList.get(i+1).addEvents(modifiedEvents); //déplacement des Events dans le Day suivant
 			}
 			
 			// Day11

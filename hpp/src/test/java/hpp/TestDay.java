@@ -30,7 +30,7 @@ public class TestDay {
 		
 	}
 	
-	@Test
+	
 	public void testAdd() {
 		LocalDateTime currentTime = LocalDateTime.parse("2010-02-22T09:20:32.064");
 		BlockingQueue<Event> bq = new ArrayBlockingQueue<Event>(20);
@@ -49,6 +49,28 @@ public class TestDay {
 		Day day1 = new Day(currentTime, 24, listEvents);
 		day1.addEvents(newEvent);
 		assertEquals(16, day1.listEvent.size());
+	}
+	
+	@Test
+	public void testRemove() {
+		LocalDateTime currentTime = LocalDateTime.parse("2010-02-22T09:20:32.064");
+		BlockingQueue<Event> bq = new ArrayBlockingQueue<Event>(20);
+		Producer2 p2 = new Producer2(bq,"/Users/joulin/Documents/Cours TSE FISE2/Projet HPP/test_posts.dat");
+		p2.run();
+
+		List<Event> listEvents = new LinkedList<Event>();
+		for (int i=0;i<16;i++) {
+			listEvents.add(bq.remove());
+		}
+
+		List<Event> badEvent = new LinkedList<Event>();
+		badEvent.add(listEvents.get(15));
+		
+		
+		Day day1 = new Day(currentTime, 24, listEvents);
+		day1.removeEvents(badEvent);
+
+		assertEquals(15, day1.listEvent.size());
 	}
 
 }
