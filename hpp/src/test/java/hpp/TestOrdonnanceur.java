@@ -59,8 +59,13 @@ public class TestOrdonnanceur {
 	@Test
 	public void ajoutHashMap() throws InterruptedException {
 		
+		t3.getPostToPostObj().put("100", post1);
+		
+		
 		p1.add(post1);
 		p2.add(com2);
+		
+		
 		
 		t3.chooseToQueue();
 		t3.hashId();
@@ -68,6 +73,14 @@ public class TestOrdonnanceur {
 		assertEquals(1, t3.getComToPost().size());
 		
 		
+	}
+	
+	@Test
+	public void contientElement() throws InterruptedException {
+		
+		this.ajoutHashMap();
+		
+		assertEquals(post1.getId(), t3.getComToPost().get(t3.getCurrentObj().getId()));
 	}
 
 }

@@ -79,24 +79,24 @@ public class Ordonnanceur implements Runnable {
 	
 	public void hashId() {
 		
-		String currentId = this.currentObj.getId();
+		String currentId = this.getCurrentObj().getId();
 		
 		//Si l'objet actuel est un Post
-		if(this.currentObj instanceof Post) {
+		if(this.getCurrentObj() instanceof Post) {
 			
-			this.postToObjPost.put(currentId, this.currentObj); //Lien entre l'ID du post et de l'objet Event associé dans une HashMap
+			this.getPostToPostObj().put(currentId, this.getCurrentObj()); //Lien entre l'ID du post et de l'objet Event associé dans une HashMap
 			
 		}
-		else if(this.currentObj instanceof Comment){ //Si l'objet actuel est un Comment
+		else if(this.getCurrentObj() instanceof Comment){ //Si l'objet actuel est un Comment
 			
-			if(postToObjPost.containsKey(((Comment) this.currentObj).getPostRepliedId())) { //Si le Comment répond à un Post
+			if(this.getPostToPostObj().containsKey(((Comment) this.getCurrentObj()).getPostRepliedId())) { //Si le Comment répond à un Post
 				
-				this.comToPost.put(currentId, ((Comment) this.currentObj).getPostRepliedId()); //Lien entre l'ID du Comment et l'ID du Post associé
+				this.getComToPost().put(currentId, ((Comment) this.getCurrentObj()).getPostRepliedId()); //Lien entre l'ID du Comment et l'ID du Post associé
 					
 			}
-			else if(comToPost.containsKey(((Comment) this.currentObj).getPostRepliedId())) { //Si le Comment répond à un Comment
+			else if(this.getComToPost().containsKey(((Comment) this.getCurrentObj()).getPostRepliedId())) { //Si le Comment répond à un Comment
 					
-				this.comToPost.put(currentId, comToPost.get(((Comment) this.currentObj).getPostRepliedId())); //Lien entre l'ID de la réponse et l'ID du Post associé
+				this.getComToPost().put(currentId, this.getComToPost().get(((Comment) this.getCurrentObj()).getPostRepliedId())); //Lien entre l'ID de la réponse et l'ID du Post associé
 			}		
 		}
 	}
