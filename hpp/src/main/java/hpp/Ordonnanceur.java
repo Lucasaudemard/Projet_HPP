@@ -33,6 +33,8 @@ public class Ordonnanceur implements Runnable {
 		this.produce1 = p1;
 		this.produce2 = p2;
 		
+		this.top3 = new LinkedList<Event>();
+		
 		this.dayList = new LinkedList<Day>(); //déclaration de la liste de Day
 		
 		for (int i=1; i<12; i++) {
@@ -183,7 +185,7 @@ public class Ordonnanceur implements Runnable {
 		}
 	}
 	
-	public void getTop3() {
+	public void updateTop3() {
 		
 		
 		
