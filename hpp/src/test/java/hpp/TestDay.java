@@ -65,8 +65,7 @@ public class TestDay {
 
 		List<Event> badEvent = new LinkedList<Event>();
 		badEvent.add(listEvents.get(15));
-		
-		
+				
 		Day day1 = new Day(currentTime, 24, listEvents);
 		day1.removeEvents(badEvent);
 

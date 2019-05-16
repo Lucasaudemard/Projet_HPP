@@ -68,9 +68,6 @@ public class Ordonnanceur implements Runnable {
 		}
 		
 		dayList.get(0).addEvent(this.currentObj); // ajout du currentObj dans le Day 1 (soit le premier élément de dayList)
-		//TODO
-		// vérifier si c'est une réponse + changer le postiD associé si oui
-		// si c'est un comment (ou une réponse) faire appel à addNewComment
 		
 	}
 	
@@ -104,7 +101,7 @@ public class Ordonnanceur implements Runnable {
 			
 	public void incrementScores() {
 		
-		for (int i=10; i>=0; i--) {
+		for (int i=9; i>=0; i--) {
 			
 			List<Event> modifiedEvents = new LinkedList<Event>();
 			modifiedEvents = this.dayList.get(i).compareTS();
@@ -133,13 +130,17 @@ public class Ordonnanceur implements Runnable {
 						
 						p.decreaseExternScore(); // décremenetation de l'extern score du post de 1
 						
-						if (i==10) { // pour les comments le score intern au comment est égal à 10-nombre de jours
+						if (i==9) { // pour les comments le score intern au comment est égal à 10-nombre de jours
+							
+							// suppression du comment dans la hashtable
+							String commentIDtoDelete = modifiedEvents.get(j).getId();
+							this.getComToPost().remove(commentIDtoDelete);
+						
 							modifiedEvents.remove(j); //on supprime l'Event de modifiedEvents si c'est un comment vieux de 10 jours
 						}
 					}
 					else {
 						modifiedEvents.remove(j); //on supprime l'Event de modifiedEvents si le post associé n'existe plus
-						// supprimer le comment de la hashmap !!!!
 					}
 				}
 				
@@ -147,7 +148,19 @@ public class Ordonnanceur implements Runnable {
 				dayList.get(i).removeEvents(modifiedEvents); //suppression des Events qui changent de jour
  			}
 			
+			
 			// Day11
+			List<Event> listEventsDay11 =dayList.get(10).listEvent;
+			for (int k=0;k<listEventsDay11.size();k++) {
+				if (((Post) listEventsDay11.get(k)).getScore()==0) {
+					
+					String postIDtoDelete = listEventsDay11.get(k).getId();
+					Post postToDelete = (Post) postToObjPost.get(postIDtoDelete);
+					postToDelete = null; // suppression de l'objet Post mort
+					this.getPostToPostObj().remove(postIDtoDelete); //suppresion dans la hashtable
+				}
+			}
+			
 			
 		}
 	}
