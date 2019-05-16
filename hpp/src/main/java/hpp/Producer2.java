@@ -37,6 +37,7 @@ public class Producer2 implements Runnable {
 			String line;
 			try {
 				while ((line = br.readLine()) != null) {
+					
 					String [] lineList = line.split("[|]");
 					LocalDateTime dateTime = LocalDateTime.parse(line.split("[+]")[0]);
 					Post p = new Post(dateTime,lineList[1],lineList[lineList.length-1]);

@@ -1,6 +1,7 @@
 package hpp;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 
 public class Post implements Event {
 	private LocalDateTime timeStamp;
@@ -9,8 +10,7 @@ public class Post implements Event {
 	private int internScore;
 	private int externScore;
 	private int commenter;
-	
-	
+	LinkedHashSet<String> commentHashSet = new LinkedHashSet<String>();
 	
 	
 	
@@ -27,61 +27,40 @@ public class Post implements Event {
 
 	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
 		return this.postId;
 	}
-
-	@Override
-	public void changeId(String newId) {
-		// TODO Auto-generated method stub
-		this.postId = newId;
-	}
-
+	
 	@Override
 	public LocalDateTime getTs() {
-		// TODO Auto-generated method stub
 		return this.timeStamp;
 	}
 
-
-	@Override
 	public void decreaseInternScore() {
-		// TODO Auto-generated method stub
 		this.internScore--;
 	}
 	
 	
-
-
-	@Override
-	public void addNewComment() {
-		// TODO Auto-generated method stub
+	public void addNewComment(String userId) {
+		//TODO functionnality to add the commenter_id to the hashmap
 		this.externScore+=10;
+		if (this.commentHashSet.add(userId)) this.commenter++;
 	}
 
-
-	@Override
 	public void decreaseExternScore() {
-		// TODO Auto-generated method stub
 		this.externScore--;
 		
 	}
 	
-	@Override
 	public int getScore() {
 		return this.internScore+this.externScore;
 	}
 	
-	@Override
 	public String getUserName() {
 		return this.userName;
 	}
-
-
-	@Override
-	public String getPostReplied() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
+	public int getCommenters() {
+		return this.commenter;
+	}
+
 }

@@ -37,6 +37,7 @@ public class Producer1 implements Runnable {
 			String line;
 			try {
 				while ((line = br.readLine()) != null) {
+					//TODO implement a system of exceptions
 					
 					String [] lineList = line.split("[|]");
 					LocalDateTime dateTime = LocalDateTime.parse(line.split("[+]")[0]);
