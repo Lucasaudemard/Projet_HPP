@@ -22,7 +22,7 @@ public class TestPost {
 		p.addNewComment("3");
 		assertEquals(p.getCommenters(), 3);
 		for (int i =0;i<17;i++)p.decreaseExternScore();
-		assertEquals(p.getScore(),90-17 );
+		assertEquals(p.getScore(),100-17 );
 		
 	}
 

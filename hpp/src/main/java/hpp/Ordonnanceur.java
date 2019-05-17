@@ -5,9 +5,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Ordonnanceur implements Runnable {
 
@@ -22,6 +24,7 @@ public class Ordonnanceur implements Runnable {
 	private Event currentObj;
 
 	public List<Day> dayList;
+<<<<<<< Upstream, based on origin/master
 
 	public List<String> top3;
 
@@ -29,6 +32,17 @@ public class Ordonnanceur implements Runnable {
 
 	public Ordonnanceur(BlockingQueue<Event> p1, BlockingQueue<Event> p2,String outPutPath) {
 
+=======
+	
+	public List<String> top3;
+	
+	
+	
+	
+	public Ordonnanceur(BlockingQueue<Event> p1, BlockingQueue<Event> p2 ) {
+		
+		
+>>>>>>> 1c5893d Méthode updateTop3 pour ordonnanceur
 		this.comToPost = new HashMap<>();
 		this.postToObjPost = new HashMap<>();
 
@@ -38,10 +52,25 @@ public class Ordonnanceur implements Runnable {
 		File f = new File(this.outputPath);
 		f.delete();
 		
+<<<<<<< Upstream, based on origin/master
 		this.dayList = new LinkedList<Day>(); // déclaration de la liste de Day
 
 		for (int i = 1; i < 12; i++) {
 			this.dayList.add(new Day(this.ts, 24 * i, new LinkedList<Event>())); // ajout des 11 objets Day
+=======
+		//Initialise la liste des scores avec des "" (On va comparer avec les post_id)
+		this.top3 = new ArrayList<String>();
+		for(int j = 0; j < 3; j++) {
+			this.top3.add("");
+		}
+		
+		
+		
+		this.dayList = new LinkedList<Day>(); //déclaration de la liste de Day
+		
+		for (int i=1; i<12; i++) {
+			this.dayList.add(new Day(this.ts, 24*i, new LinkedList<Event>())); //ajout des 11 objets Day
+>>>>>>> 1c5893d Méthode updateTop3 pour ordonnanceur
 		}
 
 	}
@@ -59,9 +88,17 @@ public class Ordonnanceur implements Runnable {
 
 		this.decrementScores();
 	}
+<<<<<<< Upstream, based on origin/master
 
 	public void chooseToQueue() throws InterruptedException {
 
+=======
+	
+	
+	
+	public void chooseToQueue() throws InterruptedException {
+		
+>>>>>>> 1c5893d Méthode updateTop3 pour ordonnanceur
 		Event obj1 = this.produce1.peek();
 		Event obj2 = this.produce2.peek();
 
@@ -196,8 +233,19 @@ public class Ordonnanceur implements Runnable {
 
 		}
 	}
+<<<<<<< Upstream, based on origin/master
 
+=======
+	
+	
+	/**
+	 * tempTop3[0] = top 1
+	 * tempTop3[1] = top 2
+	 * tempTop3[2] = top 3
+	 */
+>>>>>>> 1c5893d Méthode updateTop3 pour ordonnanceur
 	public void updateTop3() {
+<<<<<<< Upstream, based on origin/master
 
 	}
 
@@ -229,6 +277,120 @@ public class Ordonnanceur implements Runnable {
 			e.printStackTrace();
 		}
 
+=======
+		
+	
+		String temp;
+		int tempScore = 0;
+		boolean isChanged = false;
+		
+		List<String> tempTop3 = new ArrayList<String>();
+		
+		
+		
+		for(Map.Entry<String, Event> mapEntry : this.getPostToPostObj().entrySet()) {
+			
+			
+				if(((Post) mapEntry.getValue()).getScore() > tempScore) {
+					
+					tempScore = ((Post) mapEntry.getValue()).getScore();
+					
+					if(tempTop3.size() == 0) {
+						
+						tempTop3.add(0, (mapEntry.getValue().getId()));
+						tempTop3.add(1, "");
+						tempTop3.add(2, "");
+					}
+					else if(tempTop3.size() == 1){
+						
+						if(tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore()) {
+							
+							if(((Post) mapEntry.getValue()).getTs().isBefore(((Post) this.getPostToPostObj().get(tempTop3.get(0))).getTs())) {
+								
+								temp = tempTop3.get(0);
+								tempTop3.add(0, (mapEntry.getValue().getId()));
+								tempTop3.add(0, temp);
+							}
+							
+							tempTop3.add(1, (mapEntry.getValue().getId()));
+							tempTop3.add(2, "");
+						}
+						else {
+							
+							temp = tempTop3.get(0);
+							tempTop3.add(0, mapEntry.getValue().getId());
+							tempTop3.add(1, temp);
+							
+							tempTop3.add(2, "");
+						}
+					}
+					else if(tempTop3.size() == 2) {
+						
+						if(tempScore <= ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore <= ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() ) {
+							
+							tempTop3.add(2, (mapEntry.getValue().getId()));
+						}
+						else if(tempScore <= ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore()) {
+							
+							temp = tempTop3.get(1);
+							tempTop3.add(1, mapEntry.getValue().getId());
+							tempTop3.add(2, temp);
+						}
+						else if(tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore()) {
+							
+							temp = tempTop3.get(1);
+							tempTop3.add(2, temp);
+							temp = tempTop3.get(0);
+							tempTop3.add(1, temp);
+							tempTop3.add(0, mapEntry.getValue().getId());
+							
+						}
+						
+					}
+					else if(tempTop3.size() == 3) {
+						
+						if(tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
+							
+							temp = tempTop3.get(1);
+							tempTop3.add(2, temp);
+							temp = tempTop3.get(0);
+							tempTop3.add(1, temp);
+							tempTop3.add(0, mapEntry.getValue().getId());
+						}
+						else if(tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
+							
+							tempTop3.add(2, mapEntry.getValue().getId());
+						}
+						else if(tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
+							
+							temp = tempTop3.get(1);
+							tempTop3.add(2, temp);
+							tempTop3.add(1, mapEntry.getValue().getId());
+						}
+						else if(tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
+							
+							temp = tempTop3.get(1);
+							tempTop3.add(2, temp);
+							temp = tempTop3.get(0);
+							tempTop3.add(1, temp);
+							tempTop3.add(0, mapEntry.getValue().getId());
+						}
+					}
+					
+				}
+		}
+		
+		for(int i = 0; i < tempTop3.size(); i++) {
+			
+			if(this.top3.get(i) != tempTop3.get(i)) {
+				this.top3.add(i, tempTop3.get(i));
+				
+				isChanged = true;
+			}
+		}
+		
+		
+>>>>>>> 1c5893d Méthode updateTop3 pour ordonnanceur
 	}
 
 //-------------------------GETTER AND SETTER---------------------------

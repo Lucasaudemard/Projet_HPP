@@ -46,11 +46,6 @@ public class TestOrdonnanceur {
 	@Test
 	public void idCommentToPost() throws InterruptedException{
 		
-		//t3.hashId();
-		//t3.getPostToPostObj().put(post1.getId(), post1);
-				
-		//assertEquals(1, t3.getPostToPostObj().size());
-		
 		assertEquals("100", ((Comment) com2).getPostRepliedId());
 		
 		
