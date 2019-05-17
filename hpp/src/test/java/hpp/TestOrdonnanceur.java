@@ -26,7 +26,7 @@ public class TestOrdonnanceur {
 	
 	
 	
-	Ordonnanceur t3 = new Ordonnanceur(p1, p2);
+	Ordonnanceur t3 = new Ordonnanceur(p1, p2, null);
 
 	@Test
 	public void bonObj() throws InterruptedException {

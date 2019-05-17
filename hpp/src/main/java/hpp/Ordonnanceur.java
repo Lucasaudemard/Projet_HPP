@@ -1,15 +1,10 @@
 package hpp;
 
 import java.util.concurrent.BlockingQueue;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class Ordonnanceur implements Runnable {
 
@@ -24,7 +19,6 @@ public class Ordonnanceur implements Runnable {
 	private Event currentObj;
 
 	public List<Day> dayList;
-<<<<<<< Upstream, based on origin/master
 
 	public List<String> top3;
 
@@ -32,17 +26,6 @@ public class Ordonnanceur implements Runnable {
 
 	public Ordonnanceur(BlockingQueue<Event> p1, BlockingQueue<Event> p2,String outPutPath) {
 
-=======
-	
-	public List<String> top3;
-	
-	
-	
-	
-	public Ordonnanceur(BlockingQueue<Event> p1, BlockingQueue<Event> p2 ) {
-		
-		
->>>>>>> 1c5893d Méthode updateTop3 pour ordonnanceur
 		this.comToPost = new HashMap<>();
 		this.postToObjPost = new HashMap<>();
 
@@ -52,12 +35,10 @@ public class Ordonnanceur implements Runnable {
 		File f = new File(this.outputPath);
 		f.delete();
 		
-<<<<<<< Upstream, based on origin/master
 		this.dayList = new LinkedList<Day>(); // déclaration de la liste de Day
 
 		for (int i = 1; i < 12; i++) {
 			this.dayList.add(new Day(this.ts, 24 * i, new LinkedList<Event>())); // ajout des 11 objets Day
-=======
 		//Initialise la liste des scores avec des "" (On va comparer avec les post_id)
 		this.top3 = new ArrayList<String>();
 		for(int j = 0; j < 3; j++) {
@@ -70,7 +51,6 @@ public class Ordonnanceur implements Runnable {
 		
 		for (int i=1; i<12; i++) {
 			this.dayList.add(new Day(this.ts, 24*i, new LinkedList<Event>())); //ajout des 11 objets Day
->>>>>>> 1c5893d Méthode updateTop3 pour ordonnanceur
 		}
 
 	}
@@ -88,17 +68,9 @@ public class Ordonnanceur implements Runnable {
 
 		this.decrementScores();
 	}
-<<<<<<< Upstream, based on origin/master
 
 	public void chooseToQueue() throws InterruptedException {
 
-=======
-	
-	
-	
-	public void chooseToQueue() throws InterruptedException {
-		
->>>>>>> 1c5893d Méthode updateTop3 pour ordonnanceur
 		Event obj1 = this.produce1.peek();
 		Event obj2 = this.produce2.peek();
 
@@ -233,53 +205,9 @@ public class Ordonnanceur implements Runnable {
 
 		}
 	}
-<<<<<<< Upstream, based on origin/master
 
-=======
-	
-	
-	/**
-	 * tempTop3[0] = top 1
-	 * tempTop3[1] = top 2
-	 * tempTop3[2] = top 3
-	 */
->>>>>>> 1c5893d Méthode updateTop3 pour ordonnanceur
 	public void updateTop3() {
-<<<<<<< Upstream, based on origin/master
-
-	}
-
-	public void write() {
-		String fileContent = "";
-		for (int i = 0; i < 3; i++) {
-			String s = this.top3.get(i);
-			
-			if (s == "") {
-				fileContent += ",-,-,-";
-			} else {
-				Post p = (Post) postToObjPost.get(s);
-				if (i == 0)
-					fileContent = this.ts.toString() + "," + p.getId() + "," + p.getUserName() + "," + p.getScore()
-							+ "," + p.getCommenters();
-				else
-					fileContent = ","+p.getId() + "," + p.getUserName() + "," + p.getScore() + "," + p.getCommenters();
-			}
-		}
-
-		FileWriter fw;
-		try {
-			fw = new FileWriter(this.outputPath, true);
-			fw.write(fileContent);
-			fw.close();
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-=======
 		
-	
 		String temp;
 		int tempScore = 0;
 		boolean isChanged = false;
@@ -390,8 +318,42 @@ public class Ordonnanceur implements Runnable {
 		}
 		
 		
->>>>>>> 1c5893d Méthode updateTop3 pour ordonnanceur
 	}
+	}
+
+	}
+
+	public void write() {
+		String fileContent = "";
+		for (int i = 0; i < 3; i++) {
+			String s = this.top3.get(i);
+			
+			if (s == "") {
+				fileContent += ",-,-,-";
+			} else {
+				Post p = (Post) postToObjPost.get(s);
+				if (i == 0)
+					fileContent = this.ts.toString() + "," + p.getId() + "," + p.getUserName() + "," + p.getScore()
+							+ "," + p.getCommenters();
+				else
+					fileContent = ","+p.getId() + "," + p.getUserName() + "," + p.getScore() + "," + p.getCommenters();
+			}
+		}
+
+		FileWriter fw;
+		try {
+			fw = new FileWriter(this.outputPath, true);
+			fw.write(fileContent);
+			fw.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	
+		
 
 //-------------------------GETTER AND SETTER---------------------------
 
