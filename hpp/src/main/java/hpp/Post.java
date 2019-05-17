@@ -16,6 +16,7 @@ public class Post implements Event {
 	private int externScore;
 	private int commenter;
 	LinkedHashSet<String> commentHashSet = new LinkedHashSet<String>();
+	private LocalDateTime timeStampLastCommentary;
 	
 	
 	/**
@@ -61,10 +62,11 @@ public class Post implements Event {
 	 * Adds 10 to the extern score of the Post and increases by one the commenter number if the commenter hasn't already commented
 	 * @param userId the Id of the user that posted the comment
 	 */
-	public void addNewComment(String userId) {
+	public void addNewComment(String userId,LocalDateTime timeStampComment) {
 		//TODO functionnality to add the commenter_id to the hashmap
 		this.externScore+=10;
 		if (this.commentHashSet.add(userId)) this.commenter++;
+		this.timeStampLastCommentary= timeStampComment;
 	}
 	/**
 	 * decreases by 1 the extern score of the post 
@@ -93,6 +95,10 @@ public class Post implements Event {
 	 */
 	public int getCommenters() {
 		return this.commenter;
+	}
+	
+	public LocalDateTime getLastCommentTimeStamp() {
+		return this.timeStampLastCommentary;
 	}
 
 }
