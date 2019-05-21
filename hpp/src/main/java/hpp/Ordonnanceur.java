@@ -241,62 +241,106 @@ for (int i=9; i>=0; i--) {
 
 	public void updateTop3() {
 		
-		String temp;
-		int tempScore = 0;
-		boolean isChanged = false;
+		String temp; //Permet de changer de places les ID dans le tableau
+		int tempScore = 0; //Valeur qui va récupérer la valeur max du score dans la HashMap à chaque update
+		boolean isChanged = false; //Permet de dire à la fin si on modifie le tableau du top 3
 		
-		List<String> tempTop3 = new ArrayList<String>();
+		List<String> tempTop3 = this.top3; //Liste temporaire qui sert à comparer avec la liste Top 3
 		
 		
 		
-		for(Map.Entry<String, Event> mapEntry : this.getPostToPostObj().entrySet()) {
+		for(Map.Entry<String, Event> mapEntry : this.getPostToPostObj().entrySet()) { //On parcourt la HasMap 
 			
 			
-				if(((Post) mapEntry.getValue()).getScore() > tempScore) {
+				if(((Post) mapEntry.getValue()).getScore() > tempScore) { //On actualise la valeur max
 					
 					tempScore = ((Post) mapEntry.getValue()).getScore();
 					
-					if(tempTop3.size() == 0) {
+					if(tempTop3.size() == 0) { //Si la liste est vide, on ajoute l'élément
 						
 						tempTop3.add(0, (mapEntry.getValue().getId()));
 						tempTop3.add(1, "");
 						tempTop3.add(2, "");
 					}
-					else if(tempTop3.size() == 1){
+					else if(tempTop3.size() == 1){ //Si la liste possède un élément
 						
-						if(tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore()) {
+						if(tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore()) { //On compare si les scores sont les mêmes
 							
-							if(((Post) mapEntry.getValue()).getTs().isBefore(((Post) this.getPostToPostObj().get(tempTop3.get(0))).getTs())) {
+							if(((Post) mapEntry.getValue()).getTs().isAfter(((Post) this.getPostToPostObj().get(tempTop3.get(0))).getTs())) { //On regarde qui est le plus récent, si oui, on change de place avec l'élément actuel et on décale le premier en 2eme position
 								
 								temp = tempTop3.get(0);
 								tempTop3.add(0, (mapEntry.getValue().getId()));
-								tempTop3.add(0, temp);
+								tempTop3.add(1, temp);
+								
+							}
+							else { //Sinon on le met en 2eme position
+								
+								tempTop3.add(1, (mapEntry.getValue().getId()) );
+								tempTop3.add(2, "");
+								
 							}
 							
-							tempTop3.add(1, (mapEntry.getValue().getId()));
-							tempTop3.add(2, "");
 						}
-						else {
+						else if(tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore()){ //Si le score est supérieur, on change de place avec le 1er actuel
 							
 							temp = tempTop3.get(0);
-							tempTop3.add(0, mapEntry.getValue().getId());
+							tempTop3.add(0, (mapEntry.getValue().getId()));
 							tempTop3.add(1, temp);
+						}
+						else { //Sinon on le met en 2eme position
 							
+							tempTop3.add(1, (mapEntry.getValue().getId()) );
 							tempTop3.add(2, "");
+							
 						}
 					}
-					else if(tempTop3.size() == 2) {
+					else if(tempTop3.size() == 2) { //Si la liste contient 2 élément 
 						
-						if(tempScore <= ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore <= ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() ) {
+						//On effectue les mêmes tests mais pour tous les cas possibles en prenant en compte les scores égaux
+						
+						//Score égal au 1er
+						if(tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() ) {
 							
-							tempTop3.add(2, (mapEntry.getValue().getId()));
+							//Ts plus récent que le 1er élément
+							if(((Post) mapEntry.getValue()).getTs().isAfter(((Post) this.getPostToPostObj().get(tempTop3.get(0))).getTs())) {
+								
+								temp = tempTop3.get(1);
+								tempTop3.add(2, temp);
+								
+								temp = tempTop3.get(0);
+								tempTop3.add(0, (mapEntry.getValue().getId()));
+								tempTop3.add(1, temp);
+								
+							}
+							//Ts plus ancien que le 1er élément
+							else {
+								
+								temp = tempTop3.get(1);
+								tempTop3.add(1, (mapEntry.getValue().getId()));
+								tempTop3.add(2, temp);
+								
+							}
 						}
-						else if(tempScore <= ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore()) {
+						//Score égal au 2eme
+						else if(tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore()) {
 							
-							temp = tempTop3.get(1);
-							tempTop3.add(1, mapEntry.getValue().getId());
-							tempTop3.add(2, temp);
+							//Ts plus récent que le 2eme élément
+							if(((Post) mapEntry.getValue()).getTs().isAfter(((Post) this.getPostToPostObj().get(tempTop3.get(1))).getTs())) {
+								
+								temp = tempTop3.get(1);
+								tempTop3.add(1, (mapEntry.getValue().getId()));
+								tempTop3.add(2, temp);
+								
+							}
+							//Ts plus ancien que le 2eme élément
+							else {
+								
+								tempTop3.add(2, (mapEntry.getValue().getId()));
+								
+							}
+
 						}
+						//Score supérieur aux 2
 						else if(tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore()) {
 							
 							temp = tempTop3.get(1);
@@ -306,48 +350,112 @@ for (int i=9; i>=0; i--) {
 							tempTop3.add(0, mapEntry.getValue().getId());
 							
 						}
+						//Score inférieur aux 2
+						else {
+							
+							tempTop3.add(2, (mapEntry.getValue().getId()));
+							
+						}
 						
 					}
-					else if(tempTop3.size() == 3) {
+					else if(tempTop3.size() == 3) {//Si la liste possède 3 éléments (remplie)
 						
-						if(tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
+						//Score supérieur aux 3
+						if(tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
 							
 							temp = tempTop3.get(1);
 							tempTop3.add(2, temp);
 							temp = tempTop3.get(0);
 							tempTop3.add(1, temp);
 							tempTop3.add(0, mapEntry.getValue().getId());
+							
 						}
+						//Score supérieur au dernier élément
 						else if(tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
-							
+								
 							tempTop3.add(2, mapEntry.getValue().getId());
+
 						}
+						//Score supérieur au 2ème élément
 						else if(tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
-							
-							temp = tempTop3.get(1);
-							tempTop3.add(2, temp);
-							tempTop3.add(1, mapEntry.getValue().getId());
+								
+								temp = tempTop3.get(1);
+								tempTop3.add(2, temp);
+								tempTop3.add(1, mapEntry.getValue().getId());
+
 						}
-						else if(tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
+						//Score égal au 1er élément
+						else if(tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
 							
-							temp = tempTop3.get(1);
-							tempTop3.add(2, temp);
-							temp = tempTop3.get(0);
-							tempTop3.add(1, temp);
-							tempTop3.add(0, mapEntry.getValue().getId());
+							//Ts plus récent que le 1er élément
+							if(((Post) mapEntry.getValue()).getTs().isAfter(((Post) this.getPostToPostObj().get(tempTop3.get(0))).getTs())) {
+								
+								temp = tempTop3.get(1);
+								tempTop3.add(2, temp);
+								temp = tempTop3.get(0);
+								tempTop3.add(1, temp);
+								tempTop3.add(0, mapEntry.getValue().getId());
+								
+							}
+							//Ts plus ancien au 1er élément
+							else {
+								
+								temp = tempTop3.get(1);
+								tempTop3.add(2, temp);
+								tempTop3.add(1, mapEntry.getValue().getId());
+								
+							}
+							
 						}
-					}
+						//Score égal au 2eme élément
+						else if(tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore > ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
+							
+							//Ts plus récent que le 2eme élément
+							if(((Post) mapEntry.getValue()).getTs().isAfter(((Post) this.getPostToPostObj().get(tempTop3.get(1))).getTs())) {
+								
+								temp = tempTop3.get(1);
+								tempTop3.add(2, temp);
+								tempTop3.add(1, mapEntry.getValue().getId());
+								
+							}
+							//Ts plus ancien que le 2eme élément
+							else {
+								
+								tempTop3.add(2, mapEntry.getValue().getId());
+								
+							}
+
+						}
+						//Score egal au 3eme element
+						else if(tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(0))).getScore() && tempScore < ((Post) this.getPostToPostObj().get(tempTop3.get(1))).getScore() && tempScore == ((Post) this.getPostToPostObj().get(tempTop3.get(2))).getScore()) {
+							
+							//Ts plus récent que le 3eme élément
+							if(((Post) mapEntry.getValue()).getTs().isAfter(((Post) this.getPostToPostObj().get(tempTop3.get(2))).getTs())) {
+								
+								tempTop3.add(2, mapEntry.getValue().getId());
+								
+							}
+							//Ts plus ancien que le 3eme élément et dans ce cas on ne fait rien
+							
+						}
+
 					
+					}
 				}
 		}
 		
+		//Une fois notre liste construite et mise à jour, on la compare avec la liste actuelle de top 3, en regardant si il y a une différence
 		for(int i = 0; i < tempTop3.size(); i++) {
 			
 			if(this.top3.get(i) != tempTop3.get(i)) {
 				this.top3.add(i, tempTop3.get(i));
 				
-				isChanged = true;
+				isChanged = true; //Si il y a un changement, on le notifie
 			}
+		}
+		
+		if(isChanged) {
+			this.write(); //On écrit dans le .dat et on actualise
 		}
 		
 		
