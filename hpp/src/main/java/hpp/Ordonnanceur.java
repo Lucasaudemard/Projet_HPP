@@ -1,10 +1,15 @@
 package hpp;
 
 import java.util.concurrent.BlockingQueue;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Ordonnanceur implements Runnable {
 
@@ -46,20 +51,13 @@ public class Ordonnanceur implements Runnable {
 
 		for (int i = 1; i < 12; i++) {
 			this.dayList.add(new Day(this.ts, 24 * i, new LinkedList<Event>())); // ajout des 11 objets Day
+		}
+			
 		//Initialise la liste des scores avec des "" (On va comparer avec les post_id)
 		this.top3 = new ArrayList<String>();
 		for(int j = 0; j < 3; j++) {
 			this.top3.add("");
 		}
-		
-		
-		
-		this.dayList = new LinkedList<Day>(); //déclaration de la liste de Day
-		
-		for (int i=1; i<12; i++) {
-			this.dayList.add(new Day(this.ts, 24*i, new LinkedList<Event>())); //ajout des 11 objets Day
-		}
-
 	}
 
 	public void run() {
@@ -354,9 +352,6 @@ for (int i=9; i>=0; i--) {
 		
 		
 	}
-	}
-
-	}
 
 	public void write() {
 		String fileContent = "";
@@ -385,7 +380,7 @@ for (int i=9; i>=0; i--) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+	}
 		
 	
 		
