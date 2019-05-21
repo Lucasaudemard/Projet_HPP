@@ -160,7 +160,7 @@ public class Ordonnanceur implements Runnable {
 			String userID = ((Comment) this.getCurrentObj()).getUserId();
 			String postID = ((Comment) this.getCurrentObj()).getPostRepliedId();
 			Post p = (Post) postToObjPost.get(postID);
-			p.addNewComment(userID);
+			p.addNewComment(userID, ts);
 		}
 	}
 	
