@@ -56,7 +56,7 @@ public class Producer2 implements Runnable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					System.out.println(dateTime.toString() + "  "+  lineList[1] +"  " + lineList[lineList.length-1]);
+					//System.out.println(dateTime.toString() + "  "+  lineList[1] +"  " + lineList[lineList.length-1]);
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

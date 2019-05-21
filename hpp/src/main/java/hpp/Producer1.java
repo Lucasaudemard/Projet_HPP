@@ -53,7 +53,7 @@ public class Producer1 implements Runnable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					System.out.println(dateTime + "  "+  lineList[1] +"  " +lineList[2]+"  "+ lineList[lineList.length-1]);
+					//System.out.println(dateTime + "  "+  lineList[1] +"  " +lineList[2]+"  "+ lineList[lineList.length-1]);
 				}
 				Comment c = new Comment(LocalDateTime.parse("0000-01-01T00:00:00.000"),"PoisonPill","PoisonPill","PoisonPill");
 				try {

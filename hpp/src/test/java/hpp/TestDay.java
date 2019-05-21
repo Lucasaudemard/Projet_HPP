@@ -55,8 +55,8 @@ public class TestDay {
 	public void testRemove() {
 		LocalDateTime currentTime = LocalDateTime.parse("2010-02-22T09:20:32.064");
 		BlockingQueue<Event> bq = new ArrayBlockingQueue<Event>(20);
-		Producer2 p2 = new Producer2(bq,"/Users/joulin/Documents/Cours TSE FISE2/Projet HPP/test_posts.dat");
-		p2.run();
+		Producer2 p1 = new Producer2(bq,"/Users/joulin/Documents/Cours TSE FISE2/Projet HPP/test_posts.dat");
+		p1.run();
 
 		List<Event> listEvents = new LinkedList<Event>();
 		for (int i=0;i<16;i++) {

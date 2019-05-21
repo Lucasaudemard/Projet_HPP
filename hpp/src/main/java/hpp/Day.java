@@ -20,10 +20,10 @@ public class Day {
 	public List<Event> compareTS() {
 		List<Event> modifiedEvents = new LinkedList<Event>(); 
 		int i = 0;
-		LocalDateTime minTS = this.listEvent.get(i).getTs();; //le plus petit ts de la liste d'Events (soit le premier de la liste)
+		LocalDateTime minTS = this.listEvent.get(i).getTs(); //le plus petit ts de la liste d'Events (soit le premier de la liste)
 		long diffHour = Duration.between(minTS, this.currentTime).toHours(); //calcul la différence en heure entre le currentTime et le minTS 
 
-		while(diffHour>this.nbHour && i<listEvent.size()) {
+		while(diffHour>this.nbHour && i<listEvent.size()-1) {
 			modifiedEvents.add(this.listEvent.get(i));
 			i++;
 			minTS = this.listEvent.get(i).getTs(); 
@@ -49,6 +49,10 @@ public class Day {
 	// pour supprimer une liste d'Events de la listEvent du Day
 	public void removeEvents(List<Event> e) {
 			this.listEvent.removeAll(e);
+	}
+	
+	public void updateCurrentTime(LocalDateTime ct) {
+		this.currentTime=ct;
 	}
 
 }

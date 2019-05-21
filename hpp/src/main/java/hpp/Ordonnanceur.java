@@ -23,6 +23,13 @@ public class Ordonnanceur implements Runnable {
 	public List<String> top3;
 
 	private String outputPath;
+	
+	public boolean bq1Ended=false, bq2Ended=false;
+	
+	public int nbSup=0;
+	//public List<String> listpostdelete;
+	public int nbdans11=0;
+	
 
 	public Ordonnanceur(BlockingQueue<Event> p1, BlockingQueue<Event> p2,String outPutPath) {
 
@@ -73,18 +80,37 @@ public class Ordonnanceur implements Runnable {
 
 		Event obj1 = this.produce1.peek();
 		Event obj2 = this.produce2.peek();
-
-		if (obj1.getTs().isBefore(obj2.getTs())) {
-
-			this.currentObj = this.produce1.take();
-			this.setTs(this.currentObj.getTs());
-
-		} else {
-
+		
+		if(obj1.getId()=="PoisonPill" ) {
 			this.currentObj = this.produce2.take();
 			this.setTs(this.currentObj.getTs());
+			this.bq1Ended=true;
 		}
-
+		
+		else if(obj2.getId()=="PoisonPill" ) {
+			this.currentObj = this.produce1.take();
+			this.setTs(this.currentObj.getTs());
+			this.bq2Ended=true;
+		}
+		
+		else if (obj1.getId()!="PoisonPill" && obj2.getId()!="PoisonPill")
+		{
+			if(obj1.getTs().isBefore(obj2.getTs())) {
+				
+				this.currentObj = this.produce1.take();
+				this.setTs(this.currentObj.getTs());
+				
+			}
+			else if (obj2.getTs().isBefore(obj1.getTs())) {
+				
+				this.currentObj = this.produce2.take();
+				this.setTs(this.currentObj.getTs());
+			}
+		}
+		
+		for (int i=0; i<10; i++) {
+			this.dayList.get(i).updateCurrentTime(this.ts);
+		}
 	}
 
 	public void hashId() {
@@ -139,71 +165,80 @@ public class Ordonnanceur implements Runnable {
 			p.addNewComment(userID);
 		}
 	}
+	
 
 	public void decrementScores() {
+for (int i=9; i>=0; i--) {
+			if (!this.dayList.get(i).listEvent.isEmpty()) {
+				List<Event> modifiedEvents = new LinkedList<Event>();
+				modifiedEvents = this.dayList.get(i).compareTS();
+							
+				// du Day10 au Day1
+				for (int j=0; j<modifiedEvents.size();j++) {
+				
+					// si c'est un post et que son score interne n'est pas égal à 0 :
+					if (modifiedEvents.get(j) instanceof Post) {
+					
+						if (((Post) modifiedEvents.get(j)).getScore()>0) {
+						
+							((Post) modifiedEvents.get(j)).decreaseInternScore();
 
-		for (int i = 9; i >= 0; i--) {
-
-			List<Event> modifiedEvents = new LinkedList<Event>();
-			modifiedEvents = this.dayList.get(i).compareTS();
-
-			// du Day10 au Day1
-			for (int j = 0; j < modifiedEvents.size(); j++) {
-
-				// si c'est un post et que son score interne n'est pas égal à 0 :
-				if (modifiedEvents.get(j) instanceof Post) {
-
-					if (((Post) modifiedEvents.get(j)).getScore() > 0) {
-
-						((Post) modifiedEvents.get(j)).decreaseInternScore();
-
-					}
-
-				}
-
-				// si c'est un comment :
-				else {
-					String postID = ((Comment) modifiedEvents.get(j)).getPostRepliedId(); // récupération du postID
-																							// associé au comment
-					// on vérifie si le post est toujours dans la hashmap (si il est tjrs vivant)
-
-					if (postToObjPost.containsKey(postID)) {
-						Post p = (Post) postToObjPost.get(postID);// récupération de l'objet post ayant ce postID
-
-						p.decreaseExternScore(); // décremenetation de l'extern score du post de 1
-
-						if (i == 9) { // pour les comments le score intern au comment est égal à 10-nombre de jours
-
-							// suppression du comment dans la hashtable
-							String commentIDtoDelete = modifiedEvents.get(j).getId();
-							this.getComToPost().remove(commentIDtoDelete);
-
-							modifiedEvents.remove(j); // on supprime l'Event de modifiedEvents si c'est un comment vieux
-														// de 10 jours
 						}
-					} else {
-						modifiedEvents.remove(j); // on supprime l'Event de modifiedEvents si le post associé n'existe
-													// plus
+					
+					}
+				
+					// si c'est un comment :
+					else {
+						String postID = ((Comment) modifiedEvents.get(j)).getPostRepliedId(); // récupération du postID associé au comment
+						// on vérifie si le post est toujours dans la hashmap (si il est tjrs vivant)
+					
+						if (postToObjPost.containsKey(postID)) {
+							Post p = (Post) postToObjPost.get(postID);// récupération de l'objet post ayant ce postID
+						
+							p.decreaseExternScore(); // décremenetation de l'extern score du post de 1
+						
+							if (i==9) { // pour les comments le score intern au comment est égal à 10-nombre de jours
+							
+							// suppression du comment dans la hashtable
+								String commentIDtoDelete = modifiedEvents.get(j).getId();
+								this.getComToPost().remove(commentIDtoDelete);
+						
+								modifiedEvents.remove(j); //on supprime l'Event de modifiedEvents si c'est un comment vieux de 10 jours
+							}
+						}
+						else {
+						modifiedEvents.remove(j); //on supprime l'Event de modifiedEvents si le post associé n'existe plus
+						}
 					}
 				}
-
-				dayList.get(i + 1).addEvents(modifiedEvents); // ajout des Events dans le Day suivant
-				dayList.get(i).removeEvents(modifiedEvents); // suppression des Events qui changent de jour
-			}
-
-			// Day11
-			List<Event> listEventsDay11 = dayList.get(10).listEvent;
-			for (int k = 0; k < listEventsDay11.size(); k++) {
-				if (((Post) listEventsDay11.get(k)).getScore() == 0) {
-
-					String postIDtoDelete = listEventsDay11.get(k).getId();
-					Post postToDelete = (Post) postToObjPost.get(postIDtoDelete);
-					postToDelete = null; // suppression de l'objet Post mort
-					this.getPostToPostObj().remove(postIDtoDelete); // suppresion dans la hashtable
-				}
-			}
-
+				dayList.get(i+1).addEvents(modifiedEvents); //ajout des Events dans le Day suivant
+				dayList.get(i).removeEvents(modifiedEvents); //suppression des Events qui changent de jour
+ 			}
+						
 		}
+		// Day11
+
+					if (!this.dayList.get(10).listEvent.isEmpty()) {
+						List<Event> listEventsDay11 =dayList.get(10).listEvent;
+						
+						for (int k=0;k<listEventsDay11.size();k++) {
+
+							if (((Post) listEventsDay11.get(k)).getScore()==0) {
+								
+								String postIDtoDelete = listEventsDay11.get(k).getId();
+								
+								listEventsDay11.remove(k);
+
+								Post postToDelete = (Post) postToObjPost.get(postIDtoDelete);
+								postToDelete = null; // suppression de l'objet Post mort
+								this.getPostToPostObj().remove(postIDtoDelete); //suppresion dans la hashtable
+							}
+							
+						}
+
+					}
+					
+
 	}
 
 	public void updateTop3() {
