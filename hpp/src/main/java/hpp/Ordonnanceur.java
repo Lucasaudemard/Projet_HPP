@@ -53,11 +53,9 @@ public class Ordonnanceur implements Runnable {
 			this.dayList.add(new Day(this.ts, 24 * i, new LinkedList<Event>())); // ajout des 11 objets Day
 		}
 			
-		//Initialise la liste des scores avec des "" (On va comparer avec les post_id)
+		//Initialise la liste des scores 
 		this.top3 = new ArrayList<String>();
-		for(int j = 0; j < 3; j++) {
-			this.top3.add("");
-		}
+	
 	}
 
 	public void run() {
@@ -445,7 +443,7 @@ for (int i=9; i>=0; i--) {
 		}
 		
 		//Une fois notre liste construite et mise à jour, on la compare avec la liste actuelle de top 3, en regardant si il y a une différence
-		for(int i = 0; i < tempTop3.size(); i++) {
+		for(int i = 0; i < this.top3.size(); i++) {
 			
 			if(this.top3.get(i) != tempTop3.get(i)) {
 				this.top3.add(i, tempTop3.get(i));
