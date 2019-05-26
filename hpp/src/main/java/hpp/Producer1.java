@@ -73,7 +73,7 @@ public class Producer1 implements Runnable {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+		System.out.println("Prod 1 : finished");
 	}
 
 }
