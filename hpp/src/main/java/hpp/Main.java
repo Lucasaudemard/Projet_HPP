@@ -9,16 +9,20 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Main {
-	/*public static void main(String[] args) {
-		String commentsPath = "C:\\Users\\Florian\\Desktop\\Data HPP project\\comments.dat";
-		String postsPath = "C:\\Users\\Florian\\Desktop\\Data HPP project\\posts.dat";
+	//Tests on full dataset 
+	public static void main(String[] args) {
+		String commentsPath = "C:\\Users\\Florian\\Desktop\\HPP project\\Data HPP project\\comments.dat";
+		String postsPath = "C:\\Users\\Florian\\Desktop\\HPP project\\Data HPP project\\posts.dat";
+		String outputPath = "C:\\Users\\Florian\\Desktop\\HPP project\\Data HPP project\\output.dat";
 		BlockingQueue<Event> bqComments = new ArrayBlockingQueue<Event>(1000000);
 		BlockingQueue<Event> bqPosts = new ArrayBlockingQueue<Event>(1000000);
 		Producer1 commentProducer = new Producer1(bqComments, commentsPath);
 		Producer2 postProducer = new Producer2(bqPosts, postsPath);
-		ExecutorService pool = Executors.newFixedThreadPool(2);
+		Ordonnanceur ord = new Ordonnanceur(bqComments, bqPosts, outputPath);
+		ExecutorService pool = Executors.newFixedThreadPool(3);
 		pool.execute(commentProducer);
 		pool.execute(postProducer);
+		pool.execute(ord);
 		
 		// Finish
 		pool.shutdown(); // Disable new tasks from being submitted
@@ -36,6 +40,9 @@ public class Main {
 			// Preserve interrupt status
 			Thread.currentThread().interrupt();
 		}
-	}*/
+	}
+
+
 
 }
+

@@ -51,7 +51,7 @@ public class Producer1 implements Runnable {
 						bq.put(c);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						
 					}
 					//System.out.println(dateTime + "  "+  lineList[1] +"  " +lineList[2]+"  "+ lineList[lineList.length-1]);
 				}
